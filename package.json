@@ -19,7 +19,7 @@
   "dependencies": {
     "watcher-require": "^0.2.5"
   },
-  "description": "Require a module and receive a callback each time the module or one of his dependencies has been modified",
+  "description": "Require a module and receive a callback with an up-to-date one each time is modified",
   "keywords": [
     "override",
     "require",
