@@ -1,0 +1,40 @@
+{
+  "author": {
+    "email": "dallorx@gmail.com",
+    "name": "Jorge Fuentes",
+    "url": "http://llorxscript.blogspot.com.es"
+  },
+  "files": [
+    "dist/",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build-ts",
+    "build-ts": "tsc"
+  },
+  "devDependencies": {
+    "@types/chokidar": "^1.4.29",
+    "@types/node": "^6.0.46"
+  },
+  "dependencies": {
+    "watcher-require": "^0.2.5"
+  },
+  "description": "Require a module and receive a callback each time the module or one of his dependencies has been modified",
+  "keywords": [
+    "override",
+    "require",
+    "module",
+    "custom",
+    "function",
+    "watcher"
+  ],
+  "license": "MIT",
+  "main": "./dist/UpdatedRequire.js",
+  "types": "./dist/UpdatedRequire.d.ts",
+  "name": "updated-require",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/llorx/updated-require"
+  },
+  "version": "0.0.1"
+}
