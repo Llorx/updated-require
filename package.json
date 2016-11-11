@@ -17,7 +17,7 @@
     "@types/node": "^6.0.46"
   },
   "dependencies": {
-    "watcher-require": "^0.2.5"
+    "watcher-require": "^0.2.6"
   },
   "description": "Require a module and receive a callback with an up-to-date one each time is modified",
   "keywords": [
