@@ -1,6 +1,6 @@
 # Updated Require
 
-[![npm](https://img.shields.io/npm/v/npm.svg)]([![npm](https://img.shields.io/npm/dm/localeval.svg)](https://www.npmjs.com/package/watcher-require)) [![npm](https://img.shields.io/npm/dm/localeval.svg)](https://www.npmjs.com/package/updated-require)
+[![npm](https://img.shields.io/npm/v/updated-require.svg)](https://www.npmjs.com/package/updated-require) [![npm](https://img.shields.io/npm/dm/updated-require.svg)](https://www.npmjs.com/package/updated-require)
 
 This module will keep track of modules and any of his dependencies changes, and will always return an up-to-date module.
 
