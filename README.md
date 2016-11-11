@@ -12,6 +12,10 @@ To check for module and dependencies modifications without reloading, see https:
 
 `npm install updated-require`
 
+If you want a lightweight installation, but less consistent as uses nodejs `fs.watch()` instead of `chokidar` library, install with:
+
+`npm install updated-require --no-optional`
+
 ## Usage
 
 ```js
