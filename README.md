@@ -2,6 +2,10 @@
 
 This module will keep track of modules and any of his dependencies changes, and will always return an up-to-date module.
 
+To receive a callback for any non-native dependecies an specific module loads, see https://github.com/Llorx/custom-require
+
+To check for module and dependencies modifications without reloading, see https://github.com/Llorx/watcher-require
+
 ## Installation
 
 `npm install updated-require`
