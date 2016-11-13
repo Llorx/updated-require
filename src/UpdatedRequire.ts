@@ -1,10 +1,14 @@
 var Module = require("module");
 import { WatcherRequire, WatcherOptions, CustomNodeModule } from "watcher-require";
 
+export interface UpdatedOptions extends WatcherOptions {
+    recursive?:boolean;
+}
+
 export class UpdatedRequire extends WatcherRequire {
     _notifyCallback:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void;
     _updatedTimeouts:any;
-    constructor(notifyCallback?:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void, options?:WatcherOptions) {
+    constructor(notifyCallback?:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void, options?:UpdatedOptions) {
         if (!options) {
             options = {};
         }
@@ -19,7 +23,7 @@ export class UpdatedRequire extends WatcherRequire {
             let modlist:CustomNodeModule[] = [];
             if (changes.add) {
                 for (let mod of changes.add) {
-                    let wholist = mod.__whoRequired();
+                    let wholist = mod.__whoRequired(options.recursive===false);
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
@@ -29,7 +33,7 @@ export class UpdatedRequire extends WatcherRequire {
             }
             if (changes.change) {
                 for (let mod of changes.change) {
-                    let wholist = mod.__whoRequired();
+                    let wholist = mod.__whoRequired(options.recursive===false);
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
@@ -39,7 +43,7 @@ export class UpdatedRequire extends WatcherRequire {
             }
             if (changes.unlink) {
                 for (let mod of changes.unlink) {
-                    let wholist = mod.__whoRequired();
+                    let wholist = mod.__whoRequired(options.recursive===false);
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
@@ -50,7 +54,6 @@ export class UpdatedRequire extends WatcherRequire {
             for (let mod of modlist) {
                 this.unrequire(mod, null, true);
                 this.requireNotify(mod);
-                
             }
         }, options);
         this._notifyCallback = notifyCallback;

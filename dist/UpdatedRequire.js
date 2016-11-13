@@ -25,7 +25,7 @@ var UpdatedRequire = (function (_super) {
             if (changes.add) {
                 for (var _i = 0, _a = changes.add; _i < _a.length; _i++) {
                     var mod = _a[_i];
-                    var wholist = mod.__whoRequired();
+                    var wholist = mod.__whoRequired(options.recursive === false);
                     for (var _b = 0, wholist_1 = wholist; _b < wholist_1.length; _b++) {
                         var who = wholist_1[_b];
                         if (modlist.indexOf(who) < 0) {
@@ -37,7 +37,7 @@ var UpdatedRequire = (function (_super) {
             if (changes.change) {
                 for (var _c = 0, _d = changes.change; _c < _d.length; _c++) {
                     var mod = _d[_c];
-                    var wholist = mod.__whoRequired();
+                    var wholist = mod.__whoRequired(options.recursive === false);
                     for (var _e = 0, wholist_2 = wholist; _e < wholist_2.length; _e++) {
                         var who = wholist_2[_e];
                         if (modlist.indexOf(who) < 0) {
@@ -49,7 +49,7 @@ var UpdatedRequire = (function (_super) {
             if (changes.unlink) {
                 for (var _f = 0, _g = changes.unlink; _f < _g.length; _f++) {
                     var mod = _g[_f];
-                    var wholist = mod.__whoRequired();
+                    var wholist = mod.__whoRequired(options.recursive === false);
                     for (var _h = 0, wholist_3 = wholist; _h < wholist_3.length; _h++) {
                         var who = wholist_3[_h];
                         if (modlist.indexOf(who) < 0) {
