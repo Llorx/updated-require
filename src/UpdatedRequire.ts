@@ -1,10 +1,10 @@
 var Module = require("module");
-import { WatcherRequire, WatcherOptions, CustomNodeModule } from "watcher-require";
+import { WatcherRequire, WatcherOptions } from "watcher-require";
 
 export class UpdatedRequire extends WatcherRequire {
-    _notifyCallback:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void;
+    _notifyCallback:(oldmodule:NodeModule, newmodule:NodeModule)=>void;
     _updatedTimeouts:any;
-    constructor(notifyCallback?:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void, options?:WatcherOptions) {
+    constructor(notifyCallback?:(oldmodule:NodeModule, newmodule:NodeModule)=>void, options?:WatcherOptions) {
         if (!options) {
             options = {};
         }
@@ -16,7 +16,7 @@ export class UpdatedRequire extends WatcherRequire {
             }
         }
         super((changes) => {
-            let modlist:CustomNodeModule[] = [];
+            let modlist:NodeModule[] = [];
             if (changes.add) {
                 for (let mod of changes.add) {
                     let wholist = mod.__whoRequired();
@@ -55,7 +55,7 @@ export class UpdatedRequire extends WatcherRequire {
         this._notifyCallback = notifyCallback;
         this._updatedTimeouts = {};
     }
-    requireNotify(mod:CustomNodeModule) {
+    requireNotify(mod:NodeModule) {
         clearTimeout(this._updatedTimeouts[mod.filename]);
         this.require(mod.filename);
         var newmod = this.getCachedModule(mod.filename, module);
