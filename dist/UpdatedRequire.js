@@ -23,45 +23,27 @@ var UpdatedRequire = (function (_super) {
         _super.call(this, function (changes) {
             var modlist = [];
             if (changes.add) {
-                for (var _i = 0, _a = changes.add; _i < _a.length; _i++) {
-                    var mod = _a[_i];
-                    var wholist = mod.__whoRequired();
-                    for (var _b = 0, wholist_1 = wholist; _b < wholist_1.length; _b++) {
-                        var who = wholist_1[_b];
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
-                    }
-                }
+                modlist = modlist.concat(changes.add);
             }
             if (changes.change) {
-                for (var _c = 0, _d = changes.change; _c < _d.length; _c++) {
-                    var mod = _d[_c];
-                    var wholist = mod.__whoRequired();
-                    for (var _e = 0, wholist_2 = wholist; _e < wholist_2.length; _e++) {
-                        var who = wholist_2[_e];
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
-                    }
-                }
+                modlist = modlist.concat(changes.change);
             }
             if (changes.unlink) {
-                for (var _f = 0, _g = changes.unlink; _f < _g.length; _f++) {
-                    var mod = _g[_f];
-                    var wholist = mod.__whoRequired();
-                    for (var _h = 0, wholist_3 = wholist; _h < wholist_3.length; _h++) {
-                        var who = wholist_3[_h];
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
+                modlist = modlist.concat(changes.unlink);
+            }
+            var unrequired = [];
+            for (var _i = 0, modlist_1 = modlist; _i < modlist_1.length; _i++) {
+                var mod = modlist_1[_i];
+                mod.__invalidate();
+                var wholist = mod.__whoRequired();
+                for (var _a = 0, wholist_1 = wholist; _a < wholist_1.length; _a++) {
+                    var who = wholist_1[_a];
+                    if (unrequired.indexOf(who) < 0) {
+                        unrequired.push(who);
+                        _this.unrequire(who);
+                        _this.requireNotify(who);
                     }
                 }
-            }
-            for (var _j = 0, modlist_1 = modlist; _j < modlist_1.length; _j++) {
-                var mod = modlist_1[_j];
-                _this.unrequire(mod, null, true);
-                _this.requireNotify(mod);
             }
         }, options);
         this._notifyCallback = notifyCallback;

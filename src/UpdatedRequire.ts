@@ -18,38 +18,49 @@ export class UpdatedRequire extends WatcherRequire {
         super((changes) => {
             let modlist:NodeModule[] = [];
             if (changes.add) {
-                for (let mod of changes.add) {
+                modlist = modlist.concat(changes.add);
+                /*for (let mod of changes.add) {
                     let wholist = mod.__whoRequired();
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
                         }
                     }
-                }
+                }*/
             }
             if (changes.change) {
-                for (let mod of changes.change) {
+                modlist = modlist.concat(changes.change);
+                /*for (let mod of changes.change) {
                     let wholist = mod.__whoRequired();
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
                         }
                     }
-                }
+                }*/
             }
             if (changes.unlink) {
-                for (let mod of changes.unlink) {
+                modlist = modlist.concat(changes.unlink);
+                /*for (let mod of changes.unlink) {
                     let wholist = mod.__whoRequired();
                     for (let who of wholist) {
                         if (modlist.indexOf(who) < 0) {
                             modlist.push(who);
                         }
                     }
-                }
+                }*/
             }
+            var unrequired:NodeModule[] = [];
             for (let mod of modlist) {
-                this.unrequire(mod, null, true);
-                this.requireNotify(mod);
+                mod.__invalidate();
+                let wholist = mod.__whoRequired();
+                for (let who of wholist) {
+                    if (unrequired.indexOf(who) < 0) {
+                        unrequired.push(who);
+                        this.unrequire(who);
+                        this.requireNotify(who);
+                    }
+                }
             }
         }, options);
         this._notifyCallback = notifyCallback;
