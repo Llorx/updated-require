@@ -1,10 +1,10 @@
 var Module = require("module");
-import { WatcherRequire, WatcherOptions } from "watcher-require";
+import { WatcherRequire, WatcherOptions, CustomNodeModule } from "watcher-require";
 
 export class UpdatedRequire extends WatcherRequire {
-    _notifyCallback:(oldmodule:NodeModule, newmodule:NodeModule)=>void;
+    _notifyCallback:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void;
     _updatedTimeouts:any;
-    constructor(notifyCallback?:(oldmodule:NodeModule, newmodule:NodeModule)=>void, options?:WatcherOptions) {
+    constructor(notifyCallback?:(oldmodule:CustomNodeModule, newmodule:CustomNodeModule)=>void, options?:WatcherOptions) {
         if (!options) {
             options = {};
         }
@@ -16,46 +16,21 @@ export class UpdatedRequire extends WatcherRequire {
             }
         }
         super((changes) => {
-            let modlist:NodeModule[] = [];
+            let modlist:CustomNodeModule[] = [];
             if (changes.add) {
                 modlist = modlist.concat(changes.add);
-                /*for (let mod of changes.add) {
-                    let wholist = mod.__whoRequired();
-                    for (let who of wholist) {
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
-                    }
-                }*/
             }
             if (changes.change) {
                 modlist = modlist.concat(changes.change);
-                /*for (let mod of changes.change) {
-                    let wholist = mod.__whoRequired();
-                    for (let who of wholist) {
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
-                    }
-                }*/
             }
             if (changes.unlink) {
                 modlist = modlist.concat(changes.unlink);
-                /*for (let mod of changes.unlink) {
-                    let wholist = mod.__whoRequired();
-                    for (let who of wholist) {
-                        if (modlist.indexOf(who) < 0) {
-                            modlist.push(who);
-                        }
-                    }
-                }*/
             }
-            var unrequired:NodeModule[] = [];
+            var unrequired:CustomNodeModule[] = [];
             for (let mod of modlist) {
-                mod.__invalidate();
-                let wholist = mod.__whoRequired();
-                for (let who of wholist) {
-                    if (unrequired.indexOf(who) < 0) {
+                let invalidated = mod.__invalidate();
+                for (let who of invalidated) {
+                    if (unrequired.indexOf(who) < 0 && who.__customRequires.indexOf(this) > -1) {
                         unrequired.push(who);
                         this.unrequire(who);
                         this.requireNotify(who);
@@ -66,11 +41,11 @@ export class UpdatedRequire extends WatcherRequire {
         this._notifyCallback = notifyCallback;
         this._updatedTimeouts = {};
     }
-    requireNotify(mod:NodeModule) {
+    requireNotify(mod:CustomNodeModule) {
         clearTimeout(this._updatedTimeouts[mod.filename]);
         this.require(mod.filename);
         var newmod = this.getCachedModule(mod.filename, module);
-        if (!newmod.__checkInvalid()) {
+        if (!newmod.__isInvalid()) {
             if (this._notifyCallback) {
                 this._notifyCallback(mod, newmod);
             }

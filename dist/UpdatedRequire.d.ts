@@ -1,8 +1,7 @@
-/// <reference types="node" />
-import { WatcherRequire, WatcherOptions } from "watcher-require";
+import { WatcherRequire, WatcherOptions, CustomNodeModule } from "watcher-require";
 export declare class UpdatedRequire extends WatcherRequire {
-    _notifyCallback: (oldmodule: NodeModule, newmodule: NodeModule) => void;
+    _notifyCallback: (oldmodule: CustomNodeModule, newmodule: CustomNodeModule) => void;
     _updatedTimeouts: any;
-    constructor(notifyCallback?: (oldmodule: NodeModule, newmodule: NodeModule) => void, options?: WatcherOptions);
-    requireNotify(mod: NodeModule): void;
+    constructor(notifyCallback?: (oldmodule: CustomNodeModule, newmodule: CustomNodeModule) => void, options?: WatcherOptions);
+    requireNotify(mod: CustomNodeModule): void;
 }

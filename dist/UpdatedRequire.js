@@ -34,11 +34,10 @@ var UpdatedRequire = (function (_super) {
             var unrequired = [];
             for (var _i = 0, modlist_1 = modlist; _i < modlist_1.length; _i++) {
                 var mod = modlist_1[_i];
-                mod.__invalidate();
-                var wholist = mod.__whoRequired();
-                for (var _a = 0, wholist_1 = wholist; _a < wholist_1.length; _a++) {
-                    var who = wholist_1[_a];
-                    if (unrequired.indexOf(who) < 0) {
+                var invalidated = mod.__invalidate();
+                for (var _a = 0, invalidated_1 = invalidated; _a < invalidated_1.length; _a++) {
+                    var who = invalidated_1[_a];
+                    if (unrequired.indexOf(who) < 0 && who.__customRequires.indexOf(_this) > -1) {
                         unrequired.push(who);
                         _this.unrequire(who);
                         _this.requireNotify(who);
@@ -54,7 +53,7 @@ var UpdatedRequire = (function (_super) {
         clearTimeout(this._updatedTimeouts[mod.filename]);
         this.require(mod.filename);
         var newmod = this.getCachedModule(mod.filename, module);
-        if (!newmod.__checkInvalid()) {
+        if (!newmod.__isInvalid()) {
             if (this._notifyCallback) {
                 this._notifyCallback(mod, newmod);
             }
